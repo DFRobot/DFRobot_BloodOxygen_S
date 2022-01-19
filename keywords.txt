@@ -1,0 +1,29 @@
+#######################################
+# Syntax Coloring DFRobot_BloodOxygen_S
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+getHeartbeatSPO2  KEYWORD2
+getTemperature_C KEYWORD2
+setBautrate KEYWORD2
+sensorStartCollect  KEYWORD2
+sensorEndCollect    KEYWORD2
+getBautrate KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+DFRobot_BloodOxygen_S		KEYWORD1
+DFRobot_BloodOxygen_S_I2C	KEYWORD1
+DFRobot_BloodOxygen_S_SoftWareUart	KEYWORD1
+DFRobot_BloodOxygen_S_HardWareUart	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+sHeartbeatSPO2 LITERAL1
+ebautrate   LITERAL1
