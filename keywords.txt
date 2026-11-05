@@ -12,6 +12,8 @@ setBautrate KEYWORD2
 sensorStartCollect  KEYWORD2
 sensorEndCollect    KEYWORD2
 getBautrate KEYWORD2
+getVersion KEYWORD2
+getSignalInfo KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
@@ -26,4 +28,6 @@ DFRobot_BloodOxygen_S_HardWareUart	KEYWORD1
 # Methods and Functions (KEYWORD2)
 #######################################
 sHeartbeatSPO2 LITERAL1
+sSignalInfo LITERAL1
+eSignalStatus LITERAL1
 ebautrate   LITERAL1

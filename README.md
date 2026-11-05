@@ -19,7 +19,7 @@ The DFRobot MAX30102 heart rate and oximeter sensor integrates the Maxim MAX3010
 * [Credits](#credits)
 
 ## Summary
-This library provides sample codes to get the current heart rate and oxygen saturation of users.
+This library provides sample codes to get the current heart rate and oxygen saturation of users. examples/gainHeartbeatSPO2 runs directly on earlier products. examples/getSignalInfo demonstrates the new APIs and is for hardware versions above V2.0. Hardware V2.0 is not supported.
 
 ## Installation
 
@@ -35,7 +35,23 @@ To use this library, first download the library file, paste it into the \Arduino
    {
      int SPO2;
      int Heartbeat;
-   } sHeartbeatSPO2; 
+   } sHeartbeatSPO2;
+   /**
+    * @struct sSignalInfo
+    * @brief Status and signal quality from hardware above V2.0
+    * @n Hardware V2.0 is not supported. The fields are valid only after getSignalInfo returns true.
+    * @n perfusion is the perfusion index in units of 0.01%. A value of 100 means 1.00%.
+    * @n SQI is the signal quality, 0 to 100.
+    * @n ledLevel is the infrared LED drive level.
+    */
+   typedef struct
+   {
+     uint8_t status;
+     uint8_t sequence;
+     uint16_t perfusion;
+     uint8_t SQI;
+     uint8_t ledLevel;
+   } sSignalInfo;
    /**
     * @enum ebautrate
     * @brief Baud rate enum
@@ -92,6 +108,24 @@ To use this library, first download the library file, paste it into the \Arduino
     * @brief Data collecting stops
     */
    void sensorEndCollect(void);
+   /**
+    * @fn getVersion
+    * @brief Read the firmware version register
+    * @n This register exists on the earlier products as well as later ones.
+    * @n 0x0100 is the earlier firmware. 0x0200 is hardware V2.0.
+    * @return Version word. 0 means the register could not be read.
+    */
+   uint16_t getVersion(void);
+   /**
+    * @fn getSignalInfo
+    * @brief Read measurement status, sequence, PI, signal quality and infrared LED level
+    * @n This API can be used on hardware versions above V2.0.
+    * @n Hardware V2.0 is not supported, and neither are earlier products.
+    * @n Check the return value before using _sSignalInfo. A status of 0 is a real stopped state only when this function returns true.
+    * @return true when the connected hardware is above V2.0 and the data has been stored in _sSignalInfo
+    * @return false on hardware V2.0, earlier products, or a failed read. _sSignalInfo is cleared.
+    */
+   bool getSignalInfo(void);
 
 ```
 ## Compatibility
@@ -108,6 +142,7 @@ ESP8266 |      √       |             |            |
 ## History
 
 - 2019/12/13 - 1.0.0 version
+- 2026/11/05 - 1.1.0 version. Add getVersion, getSignalInfo, and examples/getSignalInfo. getSignalInfo supports hardware above V2.0 and does not support V2.0. The existing example still runs on earlier products.
 
 ## Credits
 

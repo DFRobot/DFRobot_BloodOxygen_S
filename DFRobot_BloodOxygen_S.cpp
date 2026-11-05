@@ -4,8 +4,8 @@
  * @copyright   Copyright (c) 2010 DFRobot Co.Ltd (http://www.dfrobot.com)
  * @license     The MIT License (MIT)
  * @author      PengKaixing(kaixing.peng@dfrobot.com)
- * @version  V1.0.0
- * @date  2021-06-21
+ * @version  V1.1.0
+ * @date  2026-11-05
  * @url https://github.com/DFRobot/DFRobot_BloodOxygen_S
  */
 #include "DFRobot_BloodOxygen_S.h"
@@ -116,6 +116,42 @@ void DFRobot_BloodOxygen_S::sensorEndCollect(void)
 {
   uint8_t wbuf[2] = {0, 2};
   writeReg(0x20, wbuf, 2);
+}
+
+uint16_t DFRobot_BloodOxygen_S::getVersion(void)
+{
+  uint8_t version_buf[2];
+  if (readReg(0x0A, version_buf, 2) < 0)
+  {
+    return 0;
+  }
+  return ((uint16_t)version_buf[0] << 8) | version_buf[1];
+}
+
+bool DFRobot_BloodOxygen_S::getSignalInfo(void)
+{
+  uint8_t info_buf[6];
+  uint16_t version = getVersion();
+  _sSignalInfo.status = 0;
+  _sSignalInfo.sequence = 0;
+  _sSignalInfo.perfusion = 0;
+  _sSignalInfo.SQI = 0;
+  _sSignalInfo.ledLevel = 0;
+  /* 0x0200 is hardware V2.0. This API starts from the next version. */
+  if (version <= 0x0200)
+  {
+    return false;
+  }
+  if (readReg(0x22, info_buf, 6) < 0)
+  {
+    return false;
+  }
+  _sSignalInfo.status = info_buf[0];
+  _sSignalInfo.sequence = info_buf[1];
+  _sSignalInfo.perfusion = ((uint16_t)info_buf[2] << 8) | info_buf[3];
+  _sSignalInfo.SQI = info_buf[4];
+  _sSignalInfo.ledLevel = info_buf[5];
+  return true;
 }
 
 //I2C underlying communication
